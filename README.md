@@ -58,7 +58,7 @@ This project implements several real-world backend concepts:
 
 | Category | Technology |
 |-----------|-------------|
-| Language | Java 21 |
+| Language | Java 24 |
 | Framework | Spring Boot 3 |
 | Database | MySQL |
 | ORM | Spring Data JPA |

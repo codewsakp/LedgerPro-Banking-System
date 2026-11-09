@@ -1,6 +1,6 @@
 package com.tamara.BankingAppSpringBoot.service.imp;
 
-
+import java.io.File;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -39,8 +39,8 @@ public class BankStatement {
     @Autowired
     private EmailService emailService;
 
-    private static final String FILE = "C:\\Users\\USER\\bankstatements\\Mystatement.pdf";
-
+    private static final String FILE =
+        System.getProperty("user.home") + "\\bankstatements\\Mystatement.pdf";
     /*Retrieve list of transactions wihtin a date range given an account number
      *generate a pdf file of transcations
      * send the file via email
@@ -60,8 +60,15 @@ public class BankStatement {
         Rectangle statementSize = new Rectangle(PageSize.A4);
         Document document = new Document(statementSize, 50, 50, 50, 50);
         log.info("setting statement size of the document");
-        OutputStream outputStream = new FileOutputStream(FILE);
-        PdfWriter.getInstance(document, outputStream);
+    File pdfFile = new File(FILE);
+
+    File parentDirectory = pdfFile.getParentFile();
+
+    if (parentDirectory != null && !parentDirectory.exists()) {
+        parentDirectory.mkdirs();
+    }
+
+    OutputStream outputStream = new FileOutputStream(pdfFile);        PdfWriter.getInstance(document, outputStream);
 
         // Open the document to start adding content
         document.open();
@@ -133,9 +140,14 @@ public class BankStatement {
                 .messageBody("Kindly find your requested account statement attached!")
                 .attachment(FILE)
                 .build();
-        emailService.sendEmailWithAttachment(emailDetails);
+        try {
+                emailService.sendEmailWithAttachment(emailDetails);
+                log.info("Bank statement email sent successfully.");
+            } catch (RuntimeException e) {
+                log.error("PDF generated, but email delivery failed.", e);
+            }
 
-        return transactionList;
+            return transactionList;
     }
 
     // === HELPER METHODS ===

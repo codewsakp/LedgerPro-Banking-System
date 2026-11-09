@@ -48,28 +48,37 @@ public class EmailServiceImp implements EmailService {
     }
 
     @Override
-    public void sendEmailWithAttachment(EmailDetails emailDetails) {
+public void sendEmailWithAttachment(EmailDetails emailDetails) {
+
+    try {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper;
 
-        try {
-            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(emailSender);
-            mimeMessageHelper.setTo(emailDetails.getRecipient());
-            mimeMessageHelper.setText(emailDetails.getMessageBody());
-            mimeMessageHelper.setSubject(emailDetails.getSubject());
+        MimeMessageHelper helper =
+                new MimeMessageHelper(mimeMessage, true);
 
-            FileSystemResource file = new FileSystemResource(new File(emailDetails.getAttachment()));
+        helper.setFrom(emailSender);
+        helper.setTo(emailDetails.getRecipient());
+        helper.setText(emailDetails.getMessageBody());
+        helper.setSubject(emailDetails.getSubject());
 
-            mimeMessageHelper.addAttachment(file.getFilename(), file);
-            javaMailSender.send(mimeMessage);
+        FileSystemResource file =
+                new FileSystemResource(new File(emailDetails.getAttachment()));
 
-
-            log.info(file.getFilename() + "has been sent to user with email " + emailDetails.getRecipient());
-
-
-        } catch (MessagingException e) {
-            throw  new RuntimeException();
+        if (!file.exists()) {
+            throw new RuntimeException("Statement PDF file not found!");
         }
+
+        helper.addAttachment(file.getFilename(), file);
+
+        javaMailSender.send(mimeMessage);
+
+        log.info("Statement email successfully sent to: {}",
+                emailDetails.getRecipient());
+
+    } catch (MessagingException | MailException e) {
+        log.error("Failed to send statement email", e);
+        throw new RuntimeException("Unable to send statement email", e);
     }
+}
+
 }

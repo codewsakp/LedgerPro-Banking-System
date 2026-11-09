@@ -56,6 +56,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/users/create").permitAll() // whitelist this
                         .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/statements/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/statements/**").authenticated()
                         .anyRequest().authenticated() // other endpoints need authentication
                 );
         httpSecurity.sessionManagement(

@@ -32,6 +32,11 @@ public class AccountUtils {
     public static final String TRANSFER_SUCCESS_MESSAGE = "Transfer completed successfully.";
     public static final String ACCOUNT_CREATION_SUCCESS="002";
 
+
+    public static final String INVALID_AMOUNT_CODE = "009";
+    public static final String INVALID_AMOUNT_MESSAGE =
+        "Amount must be greater than zero.";
+
     public static final String ACCOUNT_CREATION_MESSAGE="Account has been successfully created!";
 
     public static String generateAccountNumber() {
