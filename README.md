@@ -1,7 +1,7 @@
 # 💳 LedgerPro — Banking & Transaction Management System
 A full fledged **banking application** built with **Spring Boot**, designed to simulate real-world financial operations.  
 
-# LedgerPro is a Java-based banking application that provides account management, secure authentication, balance inquiries, deposits, withdrawals, fund transfers, transaction history, and bank statement generation.
+## LedgerPro is a Java-based banking application that provides account management, secure authentication, balance inquiries, deposits, withdrawals, fund transfers, transaction history, and bank statement generation.
 
 The project uses Spring Boot for backend development, MySQL for persistent storage, and Spring Security with JWT-based authentication.
 
